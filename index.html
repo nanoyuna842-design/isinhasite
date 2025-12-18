@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Mini Sistema - Catálogo</title>
+</head>
+<body>
+
+  <h1>📦 Catálogo de Produtos</h1>
+
+  <button onclick="carregarProdutos()">Carregar produtos</button>
+
+  <ul id="lista"></ul>
+
+
+  <hr>
+
+  <h2>Detalhes do Produto</h2>
+  <p id="detalhes">Clique em um produto</p>
+
+  <script>
+    // Função que chama a API
+    function carregarProdutos() {
+      fetch('https://dummyjson.com/products')
+        .then(resposta => resposta.json())
+        .then(dados => {
+          const lista = document.getElementById('lista');
+          lista.innerHTML = '';
+
+          dados.products.forEach(produto => {
+            const item = document.createElement('li');
+
+            item.innerHTML =
+              produto.title + ' - R$ ' + produto.price +
+              ' <button onclick="verDetalhes(' + produto.id + ')">Ver</button>';
+
+            lista.appendChild(item);
+          });
+        });
+    }
+
+    // Função que busca detalhes de um produto
+    function verDetalhes(id) {
+      fetch('https://dummyjson.com/products/' + id)
+        .then(resposta => resposta.json())
+        .then(produto => {
+          document.getElementById('detalhes').innerHTML =
+            '<strong>Produto:</strong> ' + produto.title + '<br>' +
+            '<strong>Preço:</strong> R$ ' + produto.price + '<br>' +
+            '<strong>Categoria:</strong> ' + produto.category + '<br>' +
+            '<strong>Descrição:</strong> ' + produto.description;
+        });
+    }
+  </script>
+
+</body>
+</html>
